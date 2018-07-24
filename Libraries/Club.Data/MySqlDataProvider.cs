@@ -78,10 +78,10 @@ namespace Club.Data
             return sb.ToString();
         }
         /// <summary>
-        /// A value indicating whether this data provider supports stored procedures        /// </summary>
+        /// A value indicating whether this data provider supports stored procedures       实在是写不明白 mysql的存储过程 /// </summary>
         public virtual bool StoredProceduredSupported
         {
-            get { return true; }
+            get { return false; }
         }
 
         public virtual bool BackupSupported
@@ -104,7 +104,7 @@ namespace Club.Data
         /// <returns>Length of the data for HASHBYTES functions</returns>
         public int SupportedLengthOfBinaryHash()
         {
-            return 0; //for SQL Server 2008 and above HASHBYTES function has a limit of 8000 characters.
+            return 4000; //for SQL Server 2008 and above HASHBYTES function has a limit of 8000 characters.
         }
     }
 }

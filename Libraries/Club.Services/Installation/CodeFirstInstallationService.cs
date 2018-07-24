@@ -2353,7 +2353,7 @@ namespace Club.Services.Installation
             settingService.SaveSetting(new CommonSettings
             {
                 UseSystemEmailForContactUsForm = true,
-                UseStoredProceduresIfSupported = true,
+                UseStoredProceduresIfSupported = false,
                 UseStoredProcedureForLoadingCategories = false,
                 SitemapEnabled = true,
                 SitemapIncludeCategories = true,

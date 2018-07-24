@@ -51,6 +51,21 @@ namespace Club.Web.Models.Install
         public bool DisableSampleDataOption { get; set; }
         public bool InstallSampleData { get; set; }
 
+        //MySqlConnectionInfo
+        [AllowHtml]
+        public string MySqlServerName { get; set; }
+
+        public int MysqlPort { get; set; }
+        [AllowHtml]
+        public string MySqlDatabaseName { get; set; }
+        [AllowHtml]
+        public string MySqlUsername { get; set; }
+        [AllowHtml]
+        public string MySqlPassword { get; set; }
+        public bool MySqlServerCreateDatabase { get; set; }
+        [AllowHtml]
+        public string MySqlDatabaseConnectionString { get; set; }
+
         public List<SelectListItem> AvailableLanguages { get; set; }
     }
 }

@@ -1,2 +1,2 @@
-DataProvider: sqlce
-DataConnectionString: Data Source=|DataDirectory|\Nop.Db.sdf;Persist Security Info=False
+DataProvider: mysql
+DataConnectionString: server=localhost;database=club;user id=root;password=Pass@word!1;persistsecurityinfo=False;allowuservariables=True;defaultcommandtimeout=30000;connectiontimeout=3000;sslmode=None

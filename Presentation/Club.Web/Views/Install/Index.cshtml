@@ -99,8 +99,13 @@
                         var selectedProvider = $("input[name=DataProvider]:checked").attr('id');
                         if (selectedProvider == 'provider_sqlce') {
                             $('#sqlConnectionInfo').hide();
+                            $('#mysqlDatabaseConnectionString').hide();
                         } else if (selectedProvider == 'provider_sqlserver') {
                             $('#sqlConnectionInfo').show();
+                            $('#mysqlDatabaseConnectionString').hide();
+                        } else if (selectedProvider == 'provider_mysql') {
+                            $('#sqlConnectionInfo').hide();
+                            $('#mysqlDatabaseConnectionString').show();
                         }
                     }
 
@@ -220,6 +225,12 @@
                                         <label>
                                             @Html.RadioButton("DataProvider", "sqlserver", (Model.DataProvider == "sqlserver"), new { id = "provider_sqlserver" })
                                             @ILS.GetResource("SqlStandard") <strong>@ILS.GetResource("Recommended")</strong>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            @Html.RadioButton("DataProvider", "mysql", (Model.DataProvider == "mysql"), new { id = "provider_mysql" })
+                                            @ILS.GetResource("Mysql") <strong>@ILS.GetResource("Recommended")</strong>
                                         </label>
                                     </div>
                                 </div>
@@ -352,6 +363,75 @@
                                             @Html.TextBoxFor(x => x.Collation, new { @class = "form-control margin-t-10" })
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div id="mysqlDatabaseConnectionString">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <div class="col-xs-7 col-xs-offset-4">
+                                            <div class="checkbox">
+                                                <label>
+                                                    @Html.CheckBoxFor(x => x.MySqlServerCreateDatabase)
+                                                    @ILS.GetResource("CreateDatabaseIfDoesNotExist")
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="credentials">
+
+                                        <div class="form-group">
+                                            <div class="col-xs-4">
+                                                <label class="control-label">
+                                                    @ILS.GetResource("Mysqlname")
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-7">
+                                                @Html.TextBoxFor(x => x.MySqlServerName, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-4">
+                                                <label class="control-label">
+                                                    @ILS.GetResource("MysqlPort")
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-7">
+                                                @Html.TextBoxFor(x => x.MysqlPort, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-4">
+                                                <label class="control-label">
+                                                    @ILS.GetResource("DatabaseName")
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-7">
+                                                @Html.TextBoxFor(x => x.MySqlDatabaseName, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-4">
+                                                <label class="control-label">
+                                                    @ILS.GetResource("MySqlUsername")
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-7">
+                                                @Html.TextBoxFor(x => x.MySqlUsername, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-4">
+                                                <label class="control-label">
+                                                    @ILS.GetResource("MySqlPassword")
+                                                </label>
+                                            </div>
+                                            <div class="col-xs-7">
+                                                @Html.TextBoxFor(x => x.MySqlPassword, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                             <div class="form-group margin-t-30">
