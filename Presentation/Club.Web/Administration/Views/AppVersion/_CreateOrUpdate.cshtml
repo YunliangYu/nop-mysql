@@ -1,0 +1,99 @@
+﻿@model AppVersionModel
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.AppCode)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.AppCode)
+                            @Html.ValidationMessageFor(model => model.AppCode)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.PlatformTypeId)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteDropDownListFor(model => model.PlatformTypeId, Model.AvailablePlatformTypes)
+                            @Html.ValidationMessageFor(model => model.PlatformTypeId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.HintUpdate)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.HintUpdate)
+                            @Html.ValidationMessageFor(model => model.HintUpdate)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.ForceUpdate)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.ForceUpdate)
+                            @Html.ValidationMessageFor(model => model.ForceUpdate)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.MainVersion)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.MainVersion)
+                            @Html.ValidationMessageFor(model => model.MainVersion)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.SubVersion)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.SubVersion)
+                            @Html.ValidationMessageFor(model => model.SubVersion)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.UpdateContent)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteTextAreaFor(model => model.UpdateContent)
+                            @Html.ValidationMessageFor(model => model.UpdateContent)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.Size):
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.Size)
+                            @Html.ValidationMessageFor(model => model.Size)
+                        </div>
+                    </div>
+                    @if (Model.CreatedOn.HasValue)
+                    {
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                @Html.SiteLabelFor(model => model.CreatedOn):
+                            </div>
+                            <div class="col-md-9">
+                                @Model.CreatedOn.Value.ToString("F")
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

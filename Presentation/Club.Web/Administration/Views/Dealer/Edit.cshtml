@@ -1,0 +1,38 @@
+﻿@model DealerModel
+@{
+    //page title
+    ViewBag.Title = T("Admin.Dealers.Dealer.EditDealerDetails").Text;
+    Html.SetActiveMenuItemSystemName("Dealer");
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "dealer-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Dealers.Dealer.EditDealerDetails") - @Model.DealerName
+            <small><i class="fa fa-arrow-circle-left"></i>@Html.ActionLink(T("Admin.Dealers.Dealer.BackToList").Text, "List")</small>
+        </h1>
+        <div class="pull-right">
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <span id="dealer-delete" class="btn bg-red">
+                <i class="fa fa-trash-o"></i>
+                @T("Admin.Common.Delete")
+            </span>
+        </div>
+    </div>
+    @Html.Partial("_CreateOrUpdate", Model)
+}
+
+@using (Html.BeginForm("GetJsonDealerCustomer", "Dealer", FormMethod.Post, new { id = "export-dealerjson-form" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" value="@Model.DealerCode" name="dealerCode" />
+}
+@Html.DeleteConfirmation("dealer-delete")

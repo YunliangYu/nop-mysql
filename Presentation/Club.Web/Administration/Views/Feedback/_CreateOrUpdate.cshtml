@@ -1,0 +1,52 @@
+﻿@model FeedbackModel
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.CustomerName)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.CustomerName)
+                            @Html.ValidationMessageFor(model => model.CustomerName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.Email)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.Email)
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.Content)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.Content)
+                            @Html.ValidationMessageFor(model => model.Content)
+                        </div>
+                    </div>
+                    @if (Model.Id > 0)
+                    {
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.CreatedOn)
+                        </div>
+                        <div class="col-md-9">
+                             @Model.CreatedOn
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

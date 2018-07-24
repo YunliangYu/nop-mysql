@@ -1,0 +1,90 @@
+﻿@model AppModel
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.Name)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.Name)
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.PlatformTypeId)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteDropDownListFor(model => model.PlatformTypeId, Model.AvailablePlatformTypes)
+                            @Html.ValidationMessageFor(model => model.PlatformTypeId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.PlatformPictureId)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.PlatformPictureId)
+                            @Html.ValidationMessageFor(model => model.PlatformPictureId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.QRCodeId)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.QRCodeId)
+                            @Html.ValidationMessageFor(model => model.QRCodeId)
+                        </div>
+                    </div>
+                   
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.DownloadUrl)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.DownloadUrl)
+                            @Html.ValidationMessageFor(model => model.DownloadUrl)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.AdminContent)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteTextAreaFor(model => model.AdminContent)
+                            @Html.ValidationMessageFor(model => model.AdminContent)
+                        </div>
+                    </div>
+                    @if (Model.CreatedOn.HasValue)
+                    {
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                @Html.SiteLabelFor(model => model.CreatedOn):
+                            </div>
+                            <div class="col-md-9">
+                                @Model.CreatedOn.Value.ToString("F")
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                @Html.SiteLabelFor(model => model.UpdatedOn):
+                            </div>
+                            <div class="col-md-9">
+                                @Model.UpdatedOn.Value.ToString("F")
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

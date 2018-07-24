@@ -1,0 +1,390 @@
+﻿@model DealerSearchModel
+@{
+    //page title
+    ViewBag.Title = T("Admin.Dealers.Dealer").Text;
+    Html.SetActiveMenuItemSystemName("Dealer");
+}
+
+@using System.Globalization;
+@{
+    var defaultGridPageSize = EngineContext.Current.Resolve<Club.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Club.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Dealers.Dealer")
+        </h1>
+        <div class="pull-right">
+            <a href="@Url.Action("Create")" class="btn bg-blue">
+                <i class="fa fa-plus-square"></i>
+                @T("Admin.Common.AddNew")
+            </a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">
+                    <i class="fa fa-download"></i>
+                    @T("Admin.Common.Import")
+                </button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">&nbsp;</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <button type="button" name="importexcel" data-toggle="modal" data-target="#importexcel-window">
+                            <i class="fa fa-file-code-o"></i>
+                            @T("Admin.Dealers.Dealer")
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" name="importdealerbrandexcel" data-toggle="modal" data-target="#importdealerbrandexcel-window">
+                            <i class="fa fa-file-code-o"></i>
+                            @T("Admin.Dealers.DealerBusinessField")
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="panel-group">
+                <div class="panel panel-default panel-search">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        @Html.SiteLabelFor(model => model.SearchKeyName)
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.SiteEditorFor(model => model.SearchKeyName)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        @Html.SiteLabelFor(model => model.SearchGroupId)
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.SiteDropDownList("SearchGroupId", Model.DealerGroups)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        @Html.SiteLabelFor(model => model.SearchRegionId)
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.SiteDropDownList("SearchRegionId", Model.Regions)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        @Html.SiteLabelFor(model => model.ProvinceId)
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.SiteDropDownListFor(model => model.ProvinceId, Model.Provinces, new { @onchange = "setCityValue()", @id = "ProvinceId" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        @Html.SiteLabelFor(model => model.CityId)
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.SiteDropDownListFor(model => model.CityId, Model.Citys, new { @id = "CityId" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7 col-md-offset-5">
+                                <button type="button" id="search-dealers" class="btn btn-primary btn-search">
+                                    <i class="fa fa-search"></i>
+                                    @T("Admin.Common.Search")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="dealers-grid"></div>
+
+                        <script>
+                            $(document).ready(function() {
+
+                                $('#exportxml-all').click(function(e) {
+                                    e.preventDefault();
+                                    $('#export-dealer-form').submit();
+                                    return false;
+                                });
+
+                                $("#dealers-grid").kendoGrid({
+                                    dataSource: {
+                                        type: "json",
+                                        transport: {
+                                            read: {
+                                                url: "@Html.Raw(Url.Action("List", "Dealer"))",
+                                                type: "POST",
+                                                dataType: "json",
+                                                data: additionalData
+                                            }
+                                        },
+                                        schema: {
+                                            data: "Data",
+                                            total: "Total",
+                                            errors: "Errors"
+                                        },
+                                        error: function(e) {
+                                            display_kendoui_grid_error(e);
+                                            // Cancel the changes
+                                            this.cancelChanges();
+                                        },
+                                        pageSize: @(defaultGridPageSize),
+                                        serverPaging: true,
+                                        serverFiltering: true,
+                                        serverSorting: true
+                                    },
+                                    pageable: {
+                                        refresh: true,
+                                        pageSizes: [@(gridPageSizes)]
+                                    },
+                                    scrollable: false,
+                                    dataBound: onDataBound,
+                                    columns: [
+                                    {
+                                        field: "DealerName",
+                                        title: "@T("Admin.Dealers.Dealer.Fields.DealerName")",
+                                        width: 100
+                                    },
+                                    {
+                                        field: "DealerShortName",
+                                        title: "@T("Admin.Dealers.Dealer.Fields.DealerShortName")",
+                                        width: 100
+                                    },
+
+                                    {
+                                        field: "DealerGroupName",
+                                        title: "@T("Admin.Dealers.Dealer.Fields.DealerGroup")",
+                                        width: 50
+                                    },
+                                    {
+                                        field: "RegionName",
+                                        title: "@T("Admin.Dealers.Dealer.Fields.Region")",
+                                        width: 50
+                                    },
+                                    {
+                                        field: "DealerCode",
+                                        title: "@T("Admin.Dealers.Dealer.Fields.DealerCode")",
+                                        width: 50
+                                    },
+                                    {
+                                        field: "ProvinceName",
+                                        title: "@T("Admin.Dealers.Dealer.Fields.Province")",
+                                        width: 30
+                                    },
+                                    {
+                                        field: "CityName",
+                                        title: "@T("Admin.Dealers.Dealer.Fields.City")",
+                                        width: 50
+                                    },
+                                    {
+                                        field: "Id",
+                                        title: "@T("Admin.Common.Edit")",
+                                        width: 100,
+                                        template: '<a href="Edit/#=Id#">@T("Admin.Common.Edit")</a>'
+                                    }]
+                                });
+                            });
+                        </script>
+
+                        <script type="text/javascript">
+                            var selectedIds = [];
+
+                            $(document).ready(function() {
+                                //search button
+                                $('#search-dealers').click(function() {
+                                    var grid = $('#dealers-grid').data('kendoGrid');
+                                    grid.dataSource.page(1); //new search. Set page size to 1
+                                    //grid.dataSource.read(); we already loaded the grid above using "page" function
+                                    //clear selected checkboxes
+                                    $('.checkboxGroups').attr('checked', false).change();
+                                    selectedIds = [];
+                                    return false;
+                                });
+
+                                $("".concat("#@Html.FieldIdFor(model => model.SearchKeyName),",
+                                    "#@Html.FieldIdFor(model => model.SearchRegionId),",
+                                    "#@Html.FieldIdFor(model => model.ProvinceId),",
+                                    "#@Html.FieldIdFor(model => model.CityId),",
+                                    "#@Html.FieldIdFor(model => model.SearchGroupId)")).keydown(function(event) {
+                                        if (event.keyCode === 13) {
+                                            $("#search-dealers").click();
+                                            return false;
+                                        }
+                                    });
+
+                                $('#mastercheckbox').click(function() {
+                                    $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                                });
+
+                            });
+
+                            function onDataBound(e) {
+                                $('#dealers-grid input[type=checkbox][id!=mastercheckbox]').each(function() {
+                                    var currentId = $(this).val();
+                                    var checked = jQuery.inArray(currentId, selectedIds);
+                                    //set checked based on if current checkbox's value is in selectedIds.
+                                    $(this).attr('checked', checked > -1);
+                                });
+
+                                updateMasterCheckbox();
+                            }
+
+                            function updateMasterCheckbox() {
+                                var numChkBoxes = $('#dealers-grid input[type=checkbox][id!=mastercheckbox]').length;
+                                var numChkBoxesChecked = $('#dealers-grid input[type=checkbox][id!=mastercheckbox]:checked').length;
+                                $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                            }
+
+                            function setCityValue()
+                            {
+                                var province = document.getElementById("ProvinceId");
+                                var index = province.selectedIndex;
+                                var provinceId = province.options[index].value;
+                                jQuery.ajax({
+                                    type: "GET",
+                                    url: "@(Url.Action("GetCitysByProvinceId", "Dealer"))",
+                                    data: { "ProvinceId": provinceId },
+                                dataType: "json",
+                                cache: false,
+                                success: function (data) {
+                                    if (data.result == 1) {
+                                        $("#CityId").empty();
+                                        $("#CityId").append("<option value='0'>All</option>");
+                                        for (var i = 0; i < data.rows.length; i++)
+                                        {
+                                            $("#CityId").append("<option value='" + data.rows[i].Value + "'>" + data.rows[i].Text + "</option>");
+                                        }
+                                    }
+                                    else {
+                                        alert(data.message);
+
+                                    }
+                                },
+                                error: function () {
+
+                                    alert('获取数据失败');
+                                }
+                            });
+                            }
+
+                            function additionalData() {
+                                var data = {
+                                    SearchKeyName: $('#@Html.FieldIdFor(model => model.SearchKeyName)').val(),
+                                    SearchRegionId: $('#SearchRegionId').val(),
+                                    ProvinceId: $('#ProvinceId').val(),
+                                    CityId: $('#CityId').val(),
+                                    SearchGroupId: $('#SearchGroupId').val()
+                                };
+                                addAntiForgeryToken(data);
+                                return data;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="importexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importexcel-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="importexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
+            </div>
+            @using (Html.BeginForm("ImportExcel", "Dealer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        @Html.AntiForgeryToken()
+                        <ul class="common-list">
+                            <li>
+                                <em>@T("Admin.Catalog.Categories.List.ImportFromExcelTip")</em>
+                            </li>
+                            <li>
+                                <em>@T("Admin.Common.ImportFromExcel.ManyRecordsWarning")</em>
+                            </li>
+                        </ul>
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <div class="label-wrapper">
+                                    <label class="control-label">
+                                        @T("Admin.Common.ExcelFile")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Admin.Common.ImportFromExcel")
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div id="importdealerbrandexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importdealerbrandexcel-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="importdealerbrandexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
+            </div>
+            @using (Html.BeginForm("ImportBrandExcel", "Dealer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        @Html.AntiForgeryToken()
+                        <ul class="common-list">
+                            <li>
+                                <em>@T("Admin.Catalog.Categories.List.ImportFromExcelTip")</em>
+                            </li>
+                            <li>
+                                <em>@T("Admin.Common.ImportFromExcel.ManyRecordsWarning")</em>
+                            </li>
+                        </ul>
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <div class="label-wrapper">
+                                    <label class="control-label">
+                                        @T("Admin.Common.ExcelFile")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="file" id="importbrandexcelfile" name="importbrandexcelfile" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Admin.Common.ImportFromExcel")
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

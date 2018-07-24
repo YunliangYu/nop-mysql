@@ -1,0 +1,97 @@
+﻿@model DealerGroupModel
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+
+<script>
+    $(document).ready(function () {
+        bindBootstrapTabSelectEvent('dealergroup-edit');
+    });
+</script>
+<div class="content">
+    <div class="form-horizontal">
+        <div id="dealergroup-edit" class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                @Html.RenderBootstrapTabHeader("tab-info", @T("Admin.Dealers.DealerGroups"), true)
+            </ul>
+            <div class="tab-content">
+                @Html.RenderBootstrapTabContent("tab-info", @TabInfo(), true)
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    //custom tabs
+    var eventMessage = new AdminTabStripCreated(this.Html, "dealergroup-edit");
+    EngineContext.Current.Resolve<IEventPublisher>().Publish(eventMessage);
+    foreach (var eventBlock in eventMessage.BlocksToRender)
+    {
+        @eventBlock
+    }
+}
+
+@*save selected tab name*@
+<input type="hidden" id="selected-tab-name" name="selected-tab-name" value="@(Html.GetSelectedTabName())">
+
+@helper TabInfo()
+{
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @(Html.LocalizedEditor<DealerGroupModel, DealerGroupLocalizedModel>
+                            ("dealerGroup-localized",
+                            @<div>
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        @Html.SiteLabelFor(model => model.Locales[item].Name)
+                                    </div>
+                                    <div class="col-md-9">
+                                        @Html.SiteEditorFor(model => model.Locales[item].Name)
+                                        @Html.ValidationMessageFor(model => model.Locales[item].Name)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        @Html.SiteLabelFor(model => model.Locales[item].Description)
+                                    </div>
+                                    <div class="col-md-9">
+                                        @Html.SiteTextAreaFor(model => model.Locales[item].Description)
+                                        @Html.ValidationMessageFor(model => model.Locales[item].Description)
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(model => model.Locales[item].LanguageId)
+                            </div>
+                        ,
+                @<div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.Name)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteEditorFor(model => model.Name)
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.SiteLabelFor(model => model.Description)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.SiteTextAreaFor(model => model.Description)
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </div>
+                    </div>
+                </div>
+                        ))
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.SiteLabelFor(model => model.DisplayOrder)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.SiteEditorFor(model => model.DisplayOrder)
+                        @Html.ValidationMessageFor(model => model.DisplayOrder)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,123 @@
+﻿@{
+    var defaultGridPageSize = EngineContext.Current.Resolve<Club.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Club.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+
+    //page title
+    ViewBag.Title = T("Admin.Apps.AppVersion").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("AppVersion");
+}
+
+
+@Html.AntiForgeryToken()
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.Apps.AppVersion")
+    </h1>
+    <div class="pull-right">
+        <a href="@Url.Action("Create")" class="btn bg-blue">
+            <i class="fa fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="AppVersion-grid"></div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#AppVersion-grid").kendoGrid({
+                               dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("List", "AppVersion"))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: addAntiForgeryToken
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function(e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    pageSize: @(defaultGridPageSize),
+                                    serverPaging: true,
+                                    serverFiltering: true,
+                                    serverSorting: true
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    pageSizes: [@(gridPageSizes)]
+                                },
+                                editable: {
+                                    confirmation: false,
+                                    mode: "inline"
+                                },
+                                scrollable: false,
+                                 columns: [{
+                                field: "AppCode",
+                                title: "@T("Admin.Apps.AppVersion.Fields.AppCode")"
+                            },
+                            {
+                                field: "PlatformTypeName",
+                                title: "@T("Admin.Apps.AppVersion.Fields.PlatformType")"
+                            },
+                            {
+                                field: "HintUpdate",
+                                title: "@T("Admin.Apps.AppVersion.Fields.HintUpdate")",
+                                width: 100,
+                                headerAttributes: { style: "text-align:center" },
+                                attributes: { style: "text-align:center" },
+                                template: '# if(HintUpdate) {# <i class="fa fa-check true-icon"></i> #} else {# <i class="fa fa-close false-icon"></i> #} #'
+                            }, 
+                            {
+                                field: "ForceUpdate",
+                                title: "@T("Admin.Apps.AppVersion.Fields.ForceUpdate")",
+                                width: 100,
+                                headerAttributes: { style: "text-align:center" },
+                                attributes: { style: "text-align:center" },
+                                template: '# if(ForceUpdate) {# <i class="fa fa-check true-icon"></i> #} else {# <i class="fa fa-close false-icon"></i> #} #'
+                            }, 
+                            {
+                                field: "MainVersion",
+                                title: "@T("Admin.Apps.AppVersion.Fields.MainVersion")"
+                            },
+                            {
+                                field: "SubVersion",
+                                title: "@T("Admin.Apps.AppVersion.Fields.SubVersion")"
+                            },
+                            {
+                                field: "Size",
+                                title: "@T("Admin.Apps.AppVersion.Fields.Size")",
+                             },
+                            {
+                                field: "CreatedOn",
+                                title: "@T("Admin.Apps.AppVersion.Fields.CreatedOn")",
+                                width: 200,
+                                type: "date",
+                                format: "{0:G}"
+                            }, {
+                                field: "Id",
+                                title: "@T("Admin.Common.Edit")",
+                                width: 100,
+                                template: '<a href="Edit/#=Id#">@T("Admin.Common.Edit")</a>'
+                            }]
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

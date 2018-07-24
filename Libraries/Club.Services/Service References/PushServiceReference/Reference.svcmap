@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="e8ff26fd-7778-4342-821f-c5e3f174659d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://123.56.166.66:8000/PushService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PushService.xsd" MetadataType="Schema" ID="507fffc5-104d-48de-a409-1db29e849c91" SourceId="1" SourceUrl="http://123.56.166.66:8000/PushService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PushService.disco" MetadataType="Disco" ID="c3684c4d-de2b-4dc3-aa32-66583b5732fa" SourceId="1" SourceUrl="http://123.56.166.66:8000/PushService.svc?disco" />
+    <MetadataFile FileName="PushService1.xsd" MetadataType="Schema" ID="53ef9ffe-0e3c-4b47-9520-7051e80f7213" SourceId="1" SourceUrl="http://123.56.166.66:8000/PushService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PushService2.xsd" MetadataType="Schema" ID="a21a896c-02e3-44be-97f6-76e645f31e37" SourceId="1" SourceUrl="http://123.56.166.66:8000/PushService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PushService.wsdl" MetadataType="Wsdl" ID="60c8a9cf-8de8-4eec-a79c-7eda8f39e51c" SourceId="1" SourceUrl="http://123.56.166.66:8000/PushService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
